@@ -1,0 +1,207 @@
+{
+  "_version": "1.59.0",
+  "sap.app": {
+    "id": "mybpserv.app.mybpserv",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.14.2",
+      "toolsId": "97ef5f1a-32b4-46e2-b22f-1858b2c3000b"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/CatalogService/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.126.2",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.ushell": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "mybpserv.app.mybpserv.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "BusinessPartnerSetList",
+          "target": "BusinessPartnerSetList"
+        },
+        {
+          "pattern": "BusinessPartnerSet({key}):?query:",
+          "name": "BusinessPartnerSetObjectPage",
+          "target": "BusinessPartnerSetObjectPage"
+        },
+        {
+          "pattern": "BusinessPartnerSet({key})/orders({key3}):?query:",
+          "name": "OrdersSetObjectPage",
+          "target": "OrdersSetObjectPage"
+        },
+        {
+          "pattern": "BusinessPartnerSet({key})/address({key2}):?query:",
+          "name": "AddressSetObjectPage",
+          "target": "AddressSetObjectPage"
+        },
+        {
+          "pattern": "BusinessPartnerSet({key})/orders({key3})/Items({key4}):?query:",
+          "name": "BusinessPartnerSet_orders_ItemsObjectPage",
+          "target": "BusinessPartnerSet_orders_ItemsObjectPage"
+        }
+      ],
+      "targets": {
+        "BusinessPartnerSetList": {
+          "type": "Component",
+          "id": "BusinessPartnerSetList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/BusinessPartnerSet",
+              "variantManagement": "Page",
+              "navigation": {
+                "BusinessPartnerSet": {
+                  "detail": {
+                    "route": "BusinessPartnerSetObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "BusinessPartnerSetObjectPage": {
+          "type": "Component",
+          "id": "BusinessPartnerSetObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/BusinessPartnerSet",
+              "navigation": {
+                "orders": {
+                  "detail": {
+                    "route": "OrdersSetObjectPage"
+                  }
+                },
+                "address": {
+                  "detail": {
+                    "route": "AddressSetObjectPage"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "AddressSetObjectPage": {
+          "type": "Component",
+          "id": "AddressSetObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "contextPath": "/BusinessPartnerSet/address"
+            }
+          }
+        },
+        "OrdersSetObjectPage": {
+          "type": "Component",
+          "id": "OrdersSetObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "contextPath": "/BusinessPartnerSet/orders",
+              "navigation": {
+                "Items": {
+                  "detail": {
+                    "route": "BusinessPartnerSet_orders_ItemsObjectPage"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "BusinessPartnerSet_orders_ItemsObjectPage": {
+          "type": "Component",
+          "id": "BusinessPartnerSet_orders_ItemsObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "contextPath": "/BusinessPartnerSet/orders/Items",
+              "navigation": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  }
+}

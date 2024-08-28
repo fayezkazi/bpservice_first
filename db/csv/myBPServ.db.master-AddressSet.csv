@@ -1,0 +1,10 @@
+ID,houseNumber,street,city,district,state,country_code,pin,phone_number,email_id,webaddress,Name,DefaultAddr,BusinessPartner_ID
+dd762907-c06f-43a1-bad8-f6b489613a6c,2,Zeppelinstrasse,Munich,Munich,Munich,DE,85399,9911224445,abc@testmail.com,http://abc.test.com,Bayern Munichen,X,dd762907-c06f-43a1-bad8-f6b489613a6c
+dd762907-c06f-43a1-bad8-f6b481613a6c,54,TiffanyRoad,Antioch,,Illinois,US,60002,9911224446,abc@testmail.com,http://abc.test.com,WindyCity Mill,X,dd762907-c06f-43a1-bad8-f6b481613a6c
+dd762907-c06f-43a1-bad8-f6b482613a6c,14,23rd street,Manhattan,,New York,US,60021,9911224447,abc@testmail.com,http://abc.test.com,ABC Group,X,dd762907-c06f-43a1-bad8-f6b482613a6c
+dd762907-c06f-43a1-bad8-f6b483613a6c,17,VIP Road,Kolkata,Kolkata,West Bengal,IN,70001,9911224448,abc@testmail.com,http://abc.test.com,ABP Corp,X,dd762907-c06f-43a1-bad8-f6b483613a6c
+dd762907-c06f-43a1-bad8-f6b484613a6c,3,PS Street,Milan,,Rome,IT,10022,9911224449,abc@testmail.com,http://abc.test.com,A C Roma,X,dd762907-c06f-43a1-bad8-f6b484613a6c
+dd762907-c06f-43a1-bad8-f6b485613a6c,19,Holan Blvd,Madrid,,Madrid,ES,20011,9911224450,abc@testmail.com,http://abc.test.com,Real Betis,X,dd762907-c06f-43a1-bad8-f6b485613a6c
+dd762907-c06f-43a1-bad8-f6b486613a6c,25,Leo street,Barcelona,,Barcelona,ES,20012,9911224451,abc@testmail.com,http://abc.test.com,Neu Camp,X,dd762907-c06f-43a1-bad8-f6b486613a6c
+dd762907-c06f-43a1-bad8-f6b487613a6c,4,M G Road,Mumbai,Mumbai,Maharastra,IN,70002,9911224452,abc@testmail.com,http://abc.test.com,Noreliable Ltd,X,dd762907-c06f-43a1-bad8-f6b487613a6c
+dd762907-c06f-43a1-bad8-f6b488613a6c,14,Insight Blvd,Los Angeles,,California,US,60012,9911224453,abc@testmail.com,http://abc.test.com,GBC Company,X,dd762907-c06f-43a1-bad8-f6b488613a6c

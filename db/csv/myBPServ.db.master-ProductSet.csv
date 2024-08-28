@@ -1,0 +1,7 @@
+ID,createdAt,createdBy,modifiedAt,modifiedBy,ProductID,Description,Supplier_Guid_ID,Currency_code,Price
+dd762907-c06f-43a1-bad8-f6b489613a6c,,,,,HT-1000,Notebooks,dd762907-c06f-43a1-bad8-f6b489613a6c,USD,100
+dd762907-c06f-43a1-bad8-f6b481613a6c,,,,,HT-1001,PDAs&Organizers,dd762907-c06f-43a1-bad8-f6b481613a6c,USD,150
+dd762907-c06f-43a1-bad8-f6b482613a6c,,,,,HT-1002,FlatScreenMonitors,dd762907-c06f-43a1-bad8-f6b482613a6c,USD,200
+dd762907-c06f-43a1-bad8-f6b483613a6c,,,,,HT-1003,FlatScreenMonitors,dd762907-c06f-43a1-bad8-f6b483613a6c,USD,250
+dd762907-c06f-43a1-bad8-f6b484613a6c,,,,,HT-1004,FlatScreenMonitors,dd762907-c06f-43a1-bad8-f6b484613a6c,USD,240
+dd762907-c06f-43a1-bad8-f6b485613a6c,,,,,HT-1005,Notebooks,dd762907-c06f-43a1-bad8-f6b485613a6c,USD,120

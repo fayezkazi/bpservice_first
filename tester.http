@@ -1,0 +1,38 @@
+POST http://localhost:4004/odata/v4/CatalogService/BusinessPartnerSet HTTP/1.1
+Accept: */*
+Content-Type: application/json
+
+{ 
+  "BPID": "100000002",
+  "CompanyName": "Heinz Sauce",
+  "ContactPerson": "Rudy Voler",
+  "BankName":"German National Bank"
+}
+
+###POST AddressSet
+POST http://localhost:4004/odata/v4/CatalogService/AddressSet 
+Accept: */*
+Content-Type: application/json
+
+{
+   "houseNumber": "4",
+   "street": "RBK Road",
+   "city": "Frankfurt",
+   "district": "Frankfurt",
+   "state": "Frankfurt",
+   "country_code": "DE",
+   "pin": "84691",
+   "Name": "Frankfurt Club"  
+}
+
+
+###Patch
+PATCH http://localhost:4004/odata/v4/CatalogService/BusinessPartnerSet(ID='584ff424-58ea-45ec-8c6b-a63aa5377384') 
+Content-Type: application/json
+
+{
+    "address_guid_ID":"3dd63aef-0bd8-4af3-8ebf-828a54277ec9"
+}
+
+###GET
+GET http://localhost:4004/odata/v4/CatalogService/BusinessPartnerSet HTTP/1.1
