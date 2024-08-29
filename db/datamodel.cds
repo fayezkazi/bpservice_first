@@ -43,7 +43,7 @@ context transaction {
 
     entity OrderItemsSet : cuid, commons.amount {
         Parent_Key: Association to transaction.OrdersSet;
-        OrderItemPos: Integer;
+        OrderItemPos: Integer @(title: '{i18n>OrderItemPos}');
         Product_ID: String(40) @(title: '{i18n>Product_ID}');
         Product_Desc: String @(title: '{i18n>Product_Desc}');
     }

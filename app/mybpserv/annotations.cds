@@ -277,184 +277,156 @@ annotate service.AddressSet with actions {
     );
 };
 
-annotate service.OrdersSet with @(UI: {
+annotate service.OrdersSet with @(
+    UI                                            : {
 
-    PresentationVariant  : {
-        Visualizations : [
-            '@UI.LineItem#OrderLineItem',
-        ],
-        $Type         : 'UI.PresentationVariantType',
-        SortOrder     : [{
-            $Type   : 'Common.SortOrderType',
-            Property: OrderID,
-        }, ],
-    },
+        PresentationVariant      : {
+            Visualizations: ['@UI.LineItem#OrderLineItem', ],
+            $Type         : 'UI.PresentationVariantType',
+            SortOrder     : [{
+                $Type   : 'Common.SortOrderType',
+                Property: OrderID,
+            }, ],
+        },
 
-    LineItem    #OrderLineItem  : [
-        {
-            $Type: 'UI.DataField',
-            Value: OrderID,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: overall_status,
-        },
-        {
-            $Type                  : 'UI.DataField',
-            Value                  : gross_amount,
-            ![@Common.FieldControl]: #ReadOnly,
-        },
-        {
-            $Type                  : 'UI.DataField',
-            Value                  : tax_amount,
-            ![@Common.FieldControl]: #ReadOnly,
-        },
-    ],
-    Facets                   : [
-        {
-            $Type : 'UI.CollectionFacet',
-            Facets: [
-                {
-                    $Type : 'UI.ReferenceFacet',
-                    Target: '@UI.FieldGroup#OrdersDetails',
-                    Label : 'Order Header',
-                },
-                {
-                    $Type : 'UI.ReferenceFacet',
-                    Target: '@UI.FieldGroup#OrdersAmount',
-                    Label : 'Orders Total Amount',
-                },
-            ],
-        },
-        {
-            $Type : 'UI.ReferenceFacet',
-            Target: ![Items/@UI.SelectionPresentationVariant#ItemLineItem],
-        },
-    ],
-    FieldGroup #OrdersDetails: {
-        $Type: 'UI.FieldGroupType',
-        Data : [
+        LineItem #OrderLineItem  : [
             {
                 $Type: 'UI.DataField',
                 Value: OrderID,
             },
             {
-                $Type: 'UI.DataField',
-                Value: overall_status,
+                $Type                    : 'UI.DataField',
+                Value                    : oStatus,
+                Criticality              : colorcode,
+                CriticalityRepresentation: #WithIcon,
             },
-        ],
-    },
-    FieldGroup #OrdersAmount : {
-        $Type: 'UI.FieldGroupType',
-        Data : [
+            {
+                $Type : 'UI.DataFieldForAction',
+                Label : 'Approve',
+                Action: 'CatalogService.oApprove',
+                Inline: true,
+            },
+            {
+                $Type : 'UI.DataFieldForAction',
+                Label : 'Reject',
+                Action: 'CatalogService.oReject',
+                Inline: true,
+            },
             {
                 $Type                  : 'UI.DataField',
                 Value                  : gross_amount,
                 ![@Common.FieldControl]: #ReadOnly,
             },
-            //    {
-            //        $Type : 'UI.DataField',
-            //        Value : net_amount,
-            //    },
             {
                 $Type                  : 'UI.DataField',
                 Value                  : tax_amount,
                 ![@Common.FieldControl]: #ReadOnly,
             },
+        ],
+        Facets                   : [
             {
-                $Type: 'UI.DataField',
-                Value: currency_code,
+                $Type : 'UI.CollectionFacet',
+                Facets: [
+                    {
+                        $Type : 'UI.ReferenceFacet',
+                        Target: '@UI.FieldGroup#OrdersDetails',
+                        Label : 'Order Header',
+                    },
+                    {
+                        $Type : 'UI.ReferenceFacet',
+                        Target: '@UI.FieldGroup#OrdersAmount',
+                        Label : 'Orders Total Amount',
+                    },
+                ],
+            },
+            {
+                $Type : 'UI.ReferenceFacet',
+                Target: ![Items/@UI.SelectionPresentationVariant#ItemLineItem],
             },
         ],
-    },
-},
-    UI.SelectionPresentationVariant #OrderLineItem : {
-        $Type : 'UI.SelectionPresentationVariantType',
-        PresentationVariant : {
-            $Type : 'UI.PresentationVariantType',
-            Visualizations : [
-                '@UI.LineItem#OrderLineItem',
-            ],
-            SortOrder : [
+        FieldGroup #OrdersDetails: {
+            $Type: 'UI.FieldGroupType',
+            Data : [
                 {
-                    $Type : 'Common.SortOrderType',
-                    Property : OrderID,
-                    Descending : false,
+                    $Type: 'UI.DataField',
+                    Value: OrderID,
+                },
+                {
+                    $Type                    : 'UI.DataField',
+                    Value                    : oStatus,
+                    Criticality              : colorcode,
+                    CriticalityRepresentation: #WithIcon,
+                },
+                {
+                    $Type : 'UI.DataFieldForAction',
+                    Label : 'Approve',
+                    Action: 'CatalogService.oApprove',
+                },
+                {
+                    $Type : 'UI.DataFieldForAction',
+                    Label : 'Reject',
+                    Action: 'CatalogService.oReject',
                 },
             ],
         },
-        SelectionVariant : {
-            $Type : 'UI.SelectionVariantType',
-            SelectOptions : [
+        FieldGroup #OrdersAmount : {
+            $Type: 'UI.FieldGroupType',
+            Data : [
+                {
+                    $Type                  : 'UI.DataField',
+                    Value                  : gross_amount,
+                    ![@Common.FieldControl]: #ReadOnly,
+                },
+                //    {
+                //        $Type : 'UI.DataField',
+                //        Value : net_amount,
+                //    },
+                {
+                    $Type                  : 'UI.DataField',
+                    Value                  : tax_amount,
+                    ![@Common.FieldControl]: #ReadOnly,
+                },
+                {
+                    $Type: 'UI.DataField',
+                    Value: currency_code,
+                },
             ],
         },
-    },);
+    },
+    UI.SelectionPresentationVariant #OrderLineItem: {
+        $Type              : 'UI.SelectionPresentationVariantType',
+        PresentationVariant: {
+            $Type         : 'UI.PresentationVariantType',
+            Visualizations: ['@UI.LineItem#OrderLineItem', ],
+            SortOrder     : [{
+                $Type     : 'Common.SortOrderType',
+                Property  : OrderID,
+                Descending: false,
+            }, ],
+        },
+        SelectionVariant   : {
+            $Type        : 'UI.SelectionVariantType',
+            SelectOptions: [],
+        },
+    },
+);
 
-annotate service.OrderItemsSet with @(UI: {
-    PresentationVariant  : {
-        Visualizations : [
-            ![@UI.LineItem#ItemLineItem]
-        ],
-        $Type         : 'UI.PresentationVariantType',
-        SortOrder     : [{
-            $Type   : 'Common.SortOrderType',
-            Property: OrderItemPos,
-        }, ],
-    },
-    LineItem   #ItemLineItem        : [
-        {
-            $Type                  : 'UI.DataField',
-            Value                  : OrderItemPos,
-            ![@Common.FieldControl]: #ReadOnly,
+annotate service.OrderItemsSet with @(
+    UI                                           : {
+        PresentationVariant   : {
+            Visualizations: [ ![@UI.LineItem#ItemLineItem] ],
+            $Type         : 'UI.PresentationVariantType',
+            SortOrder     : [{
+                $Type   : 'Common.SortOrderType',
+                Property: OrderItemPos,
+            }, ],
         },
-        {
-            $Type: 'UI.DataField',
-            Value: Product_ID,
-        },
-        {
-            $Type                  : 'UI.DataField',
-            Value                  : Product_Desc,
-            ![@Common.FieldControl]: #ReadOnly,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: currency_code,
-        },
-        // {
-        //     $Type : 'UI.DataField',
-        //     Value : gross_amount,
-        // },
-        {
-            $Type                  : 'UI.DataField',
-            Value                  : net_amount,
-            ![@Common.FieldControl]: #ReadOnly,
-        },
-        {
-            $Type                  : 'UI.DataField',
-            Value                  : tax_amount,
-            ![@Common.FieldControl]: #ReadOnly,
-        },
-    ],
-    HeaderInfo         : {
-        $Type         : 'UI.HeaderInfoType',
-        TypeName      : 'Order Item',
-        TypeNamePlural: 'Items',
-        Title         : {
-            Label: 'Item No',
-            Value: OrderItemPos,
-        }
-    },
-    Facets             : [{
-        $Type : 'UI.ReferenceFacet',
-        Target: '@UI.FieldGroup#Items',
-    }, ],
-    FieldGroup #Items  : {
-        $Type: 'UI.FieldGroupType',
-        Data : [
-            // {
-            //     $Type : 'UI.DataField',
-            //     Value : OrderItemPos,
-            // },
+        LineItem #ItemLineItem: [
+            {
+                $Type                  : 'UI.DataField',
+                Value                  : OrderItemPos,
+                ![@Common.FieldControl]: #ReadOnly,
+            },
             {
                 $Type: 'UI.DataField',
                 Value: Product_ID,
@@ -465,10 +437,13 @@ annotate service.OrderItemsSet with @(UI: {
                 ![@Common.FieldControl]: #ReadOnly,
             },
             {
-                $Type                  : 'UI.DataField',
-                Value                  : currency_code,
-                ![@Common.FieldControl]: #ReadOnly,
+                $Type: 'UI.DataField',
+                Value: currency_code,
             },
+            // {
+            //     $Type : 'UI.DataField',
+            //     Value : gross_amount,
+            // },
             {
                 $Type                  : 'UI.DataField',
                 Value                  : net_amount,
@@ -479,46 +454,163 @@ annotate service.OrderItemsSet with @(UI: {
                 Value                  : tax_amount,
                 ![@Common.FieldControl]: #ReadOnly,
             },
-            {
-                $Type : 'UI.DataFieldForAction',
-                Action: 'CatalogService.calItemTax',
-                Label : '{i18n>calItemTax}'
-            }
         ],
-    },
-},
-    UI.SelectionPresentationVariant #ItemLineItem : {
-        $Type : 'UI.SelectionPresentationVariantType',
-        PresentationVariant : {
-            $Type : 'UI.PresentationVariantType',
-            Visualizations : [
-                '@UI.LineItem#ItemLineItem',
-            ],
-            SortOrder : [
+        HeaderInfo            : {
+            $Type         : 'UI.HeaderInfoType',
+            TypeName      : 'Order Item',
+            TypeNamePlural: 'Items',
+            Title         : {
+                Label: 'Item No',
+                Value: OrderItemPos,
+            }
+        },
+        Facets                : [{
+            $Type : 'UI.ReferenceFacet',
+            Target: '@UI.FieldGroup#Items',
+        }, ],
+        FieldGroup #Items     : {
+            $Type: 'UI.FieldGroupType',
+            Data : [
+                // {
+                //     $Type : 'UI.DataField',
+                //     Value : OrderItemPos,
+                // },
                 {
-                    $Type : 'Common.SortOrderType',
-                    Property : OrderItemPos,
-                    Descending : false,
+                    $Type: 'UI.DataField',
+                    Value: Product_ID,
                 },
+                {
+                    $Type                  : 'UI.DataField',
+                    Value                  : Product_Desc,
+                    ![@Common.FieldControl]: #ReadOnly,
+                },
+                {
+                    $Type                  : 'UI.DataField',
+                    Value                  : currency_code,
+                    ![@Common.FieldControl]: #ReadOnly,
+                },
+                {
+                    $Type                  : 'UI.DataField',
+                    Value                  : net_amount,
+                    ![@Common.FieldControl]: #ReadOnly,
+                },
+                {
+                    $Type                  : 'UI.DataField',
+                    Value                  : tax_amount,
+                    ![@Common.FieldControl]: #ReadOnly,
+                },
+                {
+                    $Type : 'UI.DataFieldForAction',
+                    Action: 'CatalogService.calItemTax',
+                    Label : '{i18n>calItemTax}'
+                }
             ],
         },
-        SelectionVariant : {
-            $Type : 'UI.SelectionVariantType',
-            SelectOptions : [
-            ],
+    },
+    UI.SelectionPresentationVariant #ItemLineItem: {
+        $Type              : 'UI.SelectionPresentationVariantType',
+        PresentationVariant: {
+            $Type         : 'UI.PresentationVariantType',
+            Visualizations: ['@UI.LineItem#ItemLineItem', ],
+            SortOrder     : [{
+                $Type     : 'Common.SortOrderType',
+                Property  : OrderItemPos,
+                Descending: false,
+            }, ],
         },
-    },);
+        SelectionVariant   : {
+            $Type        : 'UI.SelectionVariantType',
+            SelectOptions: [],
+        },
+    },
+);
 
 annotate service.OrderItemsSet with actions {
     calItemTax @(
-                 // Core.OperationAvailable : {
-                 //      $edmJson: { $Ne: [{ $Path: 'in/net_amount'},  ]}
-                 //  },
-                 // Core.OperationAvailable: {
-                 //     $edmJson: {$Path: '/Singleton/enabled'}
-                 // },
-               Common.SideEffects.TargetProperties: ['in/tax_amount'], );
+        // Core.OperationAvailable : {
+        //      $edmJson: { $Ne: [{ $Path: 'in/net_amount'},  ]}
+        //  },
+        // Core.OperationAvailable: {
+        //     $edmJson: {$Path: '/Singleton/enabled'}
+        // },
+        Core.OperationAvailable            : {$edmJson: {$Eq: [
+            {$Path: 'in/Parent_Key/overall_status'},
+            'N'
+        ]}},
+        Common.SideEffects.TargetProperties: ['in/tax_amount'],
+    );
 };
+
+annotate service.OrdersSet with actions {
+    oApprove @(
+        Core.OperationAvailable: {$edmJson: {$Eq: [
+            {$Path: 'in/overall_status'},
+            'N'
+        ]}},
+        Common                 : {SideEffects: {
+            $Type           : 'Common.SideEffectsType',
+            TargetProperties: [
+                'in/overall_status',
+                'in/oStatus'
+            ],
+        }, },
+    );
+
+    oReject  @(
+        Core.OperationAvailable            : {$edmJson: {$Eq: [
+            {$Path: 'in/overall_status'},
+            'N'
+        ]}},
+        Common.SideEffects.TargetProperties: [
+            'in/overall_status',
+            'in/oStatus'
+        ]
+    );
+
+};
+
+annotate service.OrdersSet with @(
+    UI.UpdateHidden       : {$edmJson: {$Ne: [
+        {$Path: 'overall_status'},
+        'N'
+    ]}},
+    UI.DeleteHidden       : {$edmJson: {$Ne: [
+        {$Path: 'overall_status'},
+        'N'
+    ]}},
+    Capabilities.Updatable: {$edmJson: {$Eq: [
+        {$Path: 'overall_status'},
+        'N'
+    ]}},
+    Capabilities.Deletable: {$edmJson: {$Eq: [
+        {$Path: 'overall_status'},
+        'N'
+    ]}},
+);
+
+annotate service.OrderItemsSet with @(
+    UI.UpdateHidden        : {$edmJson: {$Ne: [
+        {$Path: 'Parent_Key/overall_status'},
+        'N'
+    ]}},
+    UI.DeleteHidden        : {$edmJson: {$Ne: [
+        {$Path: 'Parent_Key/overall_status'},
+        'N'
+    ]}},
+    Capabilities.Updatable : {$edmJson: {$Eq: [
+        {$Path: 'Parent_Key/overall_status'},
+        'N'
+    ]}},
+    Capabilities.Deletable : {$edmJson: {$Eq: [
+        {$Path: 'Parent_Key/overall_status'},
+        'N'
+    ]}},
+    Capabilities.Insertable: {$edmJson: {$Eq: [
+        {$Path: 'Parent_Key/overall_status'},
+        'N'
+    ]}}
+);
+
 
 //  --------------------
 // ---Value Help for Order Items --to Choose Products

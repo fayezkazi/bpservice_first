@@ -6,32 +6,82 @@ const { convert } = require("@sap/cds/libx/_runtime/hana/execute");
 class BPServices extends cds.ApplicationService {
 
     static newItemPOS;
+    static newOrderID;
 
     init() {
 
         const { BusinessPartnerSet, AddressSet, OrdersSet, OrderItemsSet } = this.entities;
 
-        //---Order Data Handling --//
-            this.after('READ', OrdersSet, async orders => {
-                console.log('After Order Read');
+        //---Begin Business Partner Handling --//
 
-            });
-            this.on('setOrderNo', async (req,res) => {
-                console.log('New Order No set');
-                try {
-                    this.newItemPOS = 0;
-                    return { overall_status : 'N', currency_code: 'USD' }
-                } catch (error) {
-                   return "Error" + error.toString(); 
+        //----End Business Partner Handling --//
+
+        //---Order Data Handling --//
+        this.after('READ', OrdersSet, async orders => {
+            console.log('After Order Read');
+            this.newOrderID = 0;
+            var OrderID = 0;
+            orders.forEach(element => {
+                if (parseInt(element.OrderID) > OrderID) {
+                    OrderID = parseInt(element.OrderID);
                 }
             });
-
-            function setOrder(OrdersSet) {
-               console.log('Function Trigger'); 
+            if (OrderID == 0) {
+                OrderID = 1;
+            };
+            this.newOrderID = OrderID + 1;
+        });
+        this.on('setOrderNo', async (req, res) => {
+            console.log('New Order No set');
+            try {
+                this.newItemPOS = 0;
+                console.log('New Order Number' + this.newOrderID);
+                var OrderID = this.newOrderID;
+                if (isNaN(OrderID)) {
+                    OrderID = 1;
+                    this.newOrderID = OrderID + 1;
+                } else {
+                    if (OrderID == 0) {
+                        OrderID = 1;
+                    }
+                    this.newOrderID = OrderID + 1;
+                }
+                return { OrderID: OrderID.toString(), overall_status: 'N', currency_code: 'USD' }
+            } catch (error) {
+                return "Error" + error.toString();
             }
+        });
+
+        function setOrder(OrdersSet) {
+            console.log('Function Trigger');
+        }
+
+        this.on('oApprove', async req => {
+            try {
+                const ID = req.params[1].ID;
+                const tx = cds.tx(req);
+                await tx.update(req.target).with({
+                    overall_status: 'A'
+                }).where({ ID: ID })
+            } catch (error) {
+                return "Error" + error.toString();
+            }
+        });
+
+        this.on('oReject', async req => {
+            try {
+                const ID = req.params[1].ID;
+                const tx = cds.tx(req);
+                await tx.update(req.target).with({
+                    overall_status: 'R'
+                }).where({ ID: ID })
+            } catch (error) {
+                return "Error" + error.toString();
+            }
+        });
 
 
-        //---Order Data Handling --//
+        //---End Order Data Handling --//
         // ---Begin This is to Calculate Tax for Order Items >>
         this.after('READ', OrderItemsSet, async Items => {
             try {
@@ -66,13 +116,14 @@ class BPServices extends cds.ApplicationService {
                 var TotalOrderAmount = parseFloat('000.00');
                 var TotalItemAmount = parseFloat('000.00');
                 var TotalOrderTaxAmount = parseFloat('000.00');
-                var TotalItemTaxAmount = parseFloat('000.00');               
+                var TotalItemTaxAmount = parseFloat('000.00');
                 var ChangeFlag = '';
                 const OrderHSet = req.orders;
                 for (let index = 0; index < OrderHSet.length; index++) {
-                    const OrderH = OrderHSet[index];                    
+                    const OrderH = OrderHSet[index];
+
                     if (!isNaN(parseFloat(OrderH.gross_amount))) {
-                        TotalOrderAmount = TotalOrderAmount + parseFloat(OrderH.gross_amount);                        
+                        TotalOrderAmount = TotalOrderAmount + parseFloat(OrderH.gross_amount);
                     }
                     OrderH.Items.forEach(element => {
                         var netAmount = parseFloat(element.net_amount);
@@ -85,7 +136,9 @@ class BPServices extends cds.ApplicationService {
                         TotalOrderAmount = TotalItemAmount;
                         ChangeFlag = 'X';
                     }
-                    TotalSellAmount = TotalSellAmount + TotalOrderAmount;
+                    if (OrderH.overall_status == 'A') {
+                        TotalSellAmount = TotalSellAmount + TotalOrderAmount;
+                    }
                     if (ChangeFlag == 'X') {
                         await UPDATE(OrdersSet).with({
                             gross_amount: TotalOrderAmount.toString(),
@@ -136,12 +189,12 @@ class BPServices extends cds.ApplicationService {
                     // CurrentItem.forEach(element => {
                     //     tax_amount = (parseFloat(element.net_amount) * 5) / 100; 
                     // });
-                    
+
 
                     await UPDATE(req.target).with({
                         tax_amount: tax_amount.toString()
-                    }).where({ID: itemID});
-                } 
+                    }).where({ ID: itemID });
+                }
                 // else {
                 //     await tx.update(OrderItemsSet).with({
                 //         tax_amount: tax_amount.toString()
@@ -152,7 +205,7 @@ class BPServices extends cds.ApplicationService {
 
                 await tx.update(OrdersSet).with({
                     tax_amount: order_tax_amount.toString()
-                }).where({ID: orderID})
+                }).where({ ID: orderID })
             } catch (error) {
                 return "Error " + error.toString();
             }
@@ -174,6 +227,7 @@ class BPServices extends cds.ApplicationService {
         this.on('setBPID', async (req, res) => {
             try {
                 // const ID = req.data.ID;
+                this.newOrderID = 0;
                 const tx = cds.tx(req);
                 const BPSet = await tx.read(BusinessPartnerSet).orderBy({
                     BPID: 'desc'
@@ -189,10 +243,10 @@ class BPServices extends cds.ApplicationService {
         this.on('setOrderItemID', async (req, res) => {
             try {
                 console.log("Nax BP ID: " + this.newItemPOS);
-                const ItemPOS = this.newItemPOS;                
+                const ItemPOS = this.newItemPOS;
                 var itemno = 0;
                 if (isNaN(ItemPOS)) {
-                    itemno = 10;  
+                    itemno = 10;
                     this.newItemPOS = itemno + 10;
                 } else {
                     itemno = ItemPOS;
